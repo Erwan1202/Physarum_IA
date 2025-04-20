@@ -1,0 +1,5 @@
+# Ignore the Doc directory
+Doc/
+
+# Ignore the virtual environment directory
+venv/
