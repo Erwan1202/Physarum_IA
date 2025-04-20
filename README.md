@@ -49,7 +49,4 @@ Reproduire l'optimisation de chemins et l'adaptation dynamique d'un Physarum dan
    pip install numpy matplotlib scipy
 Exécuter la simulation :
 
-bash
-Copier
-Modifier
 python Simulation.py
