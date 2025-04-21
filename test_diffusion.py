@@ -1,8 +1,8 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from Diffusion import diffuse_pheromones
-from Grid import Grid
+from Environment.Diffusion import diffuse_pheromones
+from Environment.Grid import Grid
 
 # Paramètres du test
 grid_size = 20
