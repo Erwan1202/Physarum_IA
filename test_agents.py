@@ -42,7 +42,7 @@ def run_simulation():
         for agent in agents:
             neighbors = agent.perceive(grid)
             new_position = agent.choose_move(neighbors)
-            agent.move(new_position)
+            agent.move(new_position, grid)
             agent.deposit_pheromone(grid)
 
         ax.clear()
