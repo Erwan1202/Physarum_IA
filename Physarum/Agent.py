@@ -26,12 +26,16 @@ class Agent:
         return neighbors
 
     def choose_move(self, neighbors: List[Tuple[Tuple[int, int], str]]) -> Tuple[int, int]:
-        """
-        Choisit le meilleur mouvement possible selon la priorité.
 
-        :param neighbors: Liste des voisins avec leur contenu
-        :return: Position (x, y) choisie
-        """
+    # 5% de chance de mouvement aléatoire
+        if random.random() < 0.05:
+            random_neighbors = [pos for (pos, cell) in neighbors]
+            if random_neighbors:
+                return random.choice(random_neighbors)
+            else:
+                return (self.x, self.y)
+
+    # Comportement normal
         food_cells: List[Tuple[int, int]] = []
         pheromone_cells: List[Tuple[int, int]] = []
         empty_cells: List[Tuple[int, int]] = []
@@ -52,6 +56,7 @@ class Agent:
             return random.choice(empty_cells)
         else:
             return (self.x, self.y)
+
 
     def move(self, new_position: Tuple[int, int]) -> None:
         """
