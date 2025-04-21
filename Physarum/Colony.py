@@ -13,12 +13,15 @@ class Colony:
 
     def initialize_agents(self, num_agents):
         for _ in range(num_agents):
-            agent = Agent(self.grid)
+            x = random.randint(0, self.grid.width - 1)
+            y = random.randint(0, self.grid.height - 1)
+            agent = Agent(self.grid, x, y)
             self.agents.append(agent)
 
     def add_agent(self, position, mutation_rate=0.05):
+        x, y = position
         # Créer un nouvel agent à une position donnée
-        new_agent = Agent(self.grid, position)
+        new_agent = Agent(self.grid, x, y)
 
         # Appliquer une mutation légère sur ses caractéristiques
         new_agent.mutation(mutation_rate)
