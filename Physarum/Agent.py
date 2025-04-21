@@ -4,17 +4,18 @@ class Agent:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.energy = 10
+        self.energy = 10  # Energie initiale
 
     def perceive(self, grid):
+        # Retourne une liste des voisins [(position, contenu), ...]
         neighbors = []
         directions = [(-1, -1), (-1, 0), (-1, 1),
                       (0, -1),          (0, 1),
                       (1, -1),  (1, 0), (1, 1)]
         for dx, dy in directions:
             nx, ny = self.x + dx, self.y + dy
-            if 0 <= nx < grid.shape[0] and 0 <= ny < grid.shape[1]:
-                neighbors.append(((nx, ny), grid[nx, ny]))
+            if 0 <= nx < len(grid) and 0 <= ny < len(grid[0]):
+                neighbors.append(((nx, ny), grid[nx][ny]))
         return neighbors
 
     def choose_move(self, neighbors):
@@ -23,11 +24,11 @@ class Agent:
         empty_cells = []
 
         for (pos, cell) in neighbors:
-            if cell == 2:  # food
+            if cell == 'food':
                 food_cells.append(pos)
-            elif cell > 0 and cell < 1:  # pheromone
+            elif cell == 'pheromone':
                 pheromone_cells.append(pos)
-            elif cell == 0:  # empty
+            elif cell == 'empty':
                 empty_cells.append(pos)
 
         if food_cells:
@@ -39,8 +40,9 @@ class Agent:
         else:
             return (self.x, self.y)
 
-    def move(self, new_pos):
-        self.x, self.y = new_pos
+    def move(self, new_position):
+        self.x, self.y = new_position
 
     def deposit_pheromone(self, grid):
-        grid[self.x, self.y] = min(grid[self.x, self.y] + 0.1, 0.9)
+        if grid[self.x][self.y] == 'empty':
+            grid[self.x][self.y] = 'pheromone'
