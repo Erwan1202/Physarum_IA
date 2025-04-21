@@ -1,36 +1,33 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from Environment.Diffusion import diffuse_pheromones
 from Environment.Grid import Grid
 
 # Paramètres du test
 grid_size = 20
 initial_pheromone_value = 100
+num_iterations = 50  # nombre total d'itérations à visualiser
 
 # Initialisation de la grille
 grid = Grid(grid_size, grid_size)
 grid.cells = np.zeros((grid_size, grid_size))
-
-# Concentration initiale au centre
 grid.cells[grid_size // 2, grid_size // 2] = initial_pheromone_value
 
-# Affichage initial
-plt.figure(figsize=(15, 5))
-plt.subplot(1, 3, 1)
-plt.title("Avant diffusion")
-plt.imshow(grid.cells, cmap='hot', interpolation='nearest')
+# Création de la figure
+fig, ax = plt.subplots()
+cax = ax.matshow(grid.cells, cmap='hot', interpolation='nearest')
+fig.colorbar(cax)
 
-# Première diffusion
-grid.cells = diffuse_pheromones(grid.cells)
-plt.subplot(1, 3, 2)
-plt.title("Après 1 diffusion")
-plt.imshow(grid.cells, cmap='hot', interpolation='nearest')
+# Fonction d'animation
+def update(frame):
+    global grid
+    grid.cells = diffuse_pheromones(grid.cells)
+    cax.set_data(grid.cells)
+    ax.set_title(f'Diffusion - Étape {frame + 1}')
+    return [cax]
 
-# Deuxième diffusion
-grid.cells = diffuse_pheromones(grid.cells)
-plt.subplot(1, 3, 3)
-plt.title("Après 2 diffusions")
-plt.imshow(grid.cells, cmap='hot', interpolation='nearest')
-
+ani = animation.FuncAnimation(fig, update, frames=num_iterations, interval=200, repeat=False)
 plt.show()
+
