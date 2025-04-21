@@ -39,17 +39,32 @@ def run_simulation():
     fig, ax = plt.subplots()
 
     for step in range(100):
+        agents_to_remove = []
+
         for agent in agents:
             neighbors = agent.perceive(grid)
             new_position = agent.choose_move(neighbors)
             agent.move(new_position, grid)
             agent.deposit_pheromone(grid)
 
+            agent.energy -= 1  # Perte d'énergie à chaque déplacement
+
+            if agent.energy <= 0:
+                agents_to_remove.append(agent)
+
+    # Retirer les agents morts
+        for dead_agent in agents_to_remove:
+            agents.remove(dead_agent)
+
         ax.clear()
         ax.imshow(grid_to_colors(grid, agents))
-        ax.set_title(f"Étape {step+1}")
+        ax.set_title(f"Étape {step+1} - Agents vivants : {len(agents)}")
         ax.axis('off')
         plt.pause(0.2)
+
+        if not agents:
+            print("Tous les agents sont morts.")
+            break
 
     plt.ioff()
     plt.show()
