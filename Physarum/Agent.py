@@ -58,19 +58,16 @@ class Agent:
             return (self.x, self.y)
 
 
-    def move(self, new_position: Tuple[int, int]) -> None:
-        """
-        Déplace l'agent à une nouvelle position.
-
-        :param new_position: Coordonnées (x, y)
-        """
+    def move(self, new_position: Tuple[int, int], grid: np.ndarray) -> None:
+        
         self.x, self.y = new_position
+        self.energy -= 1
+
+        if grid[self.x][self.y] == 'food':
+            self.energy += 5
+            grid[self.x][self.y] = 'empty'
 
     def deposit_pheromone(self, grid: np.ndarray) -> None:
-        """
-        Dépose une phéromone à la position actuelle si possible.
-
-        :param grid: Grille du monde
-        """
+        
         if grid[self.x][self.y] == 'empty':
             grid[self.x][self.y] = 'pheromone'
