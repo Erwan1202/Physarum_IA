@@ -1,5 +1,6 @@
 # /Physarum/Colony.py
 
+import random
 from Physarum.Agent import Agent
 
 class Colony:
@@ -15,8 +16,13 @@ class Colony:
             agent = Agent(self.grid)
             self.agents.append(agent)
 
-    def add_agent(self, position):
+    def add_agent(self, position, mutation_rate=0.05):
+        # Créer un nouvel agent à une position donnée
         new_agent = Agent(self.grid, position)
+
+        # Appliquer une mutation légère sur ses caractéristiques
+        new_agent.mutation(mutation_rate)
+        
         self.agents.append(new_agent)
 
     def remove_agent(self, agent):
@@ -36,11 +42,15 @@ class Colony:
 
             # Vérifier si l'agent peut se diviser
             elif agent.energy >= self.energy_to_divide:
-                position = agent.position  # Position actuelle
-                new_agents.append(position)  # On crée un nouvel agent au même endroit (ou proche)
+                # Division imparfaite : trouver une cellule voisine disponible
+                new_position = self.get_random_neighbor(agent.position)
 
-                # Facultatif : réduire l'énergie de l'agent qui se divise
-                agent.energy /= 2  
+                if new_position:
+                    new_agents.append(new_position)
+
+                    # Division asymétrique de l'énergie
+                    child_energy = agent.energy * 0.4
+                    agent.energy *= 0.6
 
         # Supprimer les agents morts
         for agent in agents_to_remove:
@@ -49,3 +59,19 @@ class Colony:
         # Ajouter les nouveaux agents
         for position in new_agents:
             self.add_agent(position)
+
+    def get_random_neighbor(self, position):
+        """Retourne une position voisine aléatoire disponible autour de la position donnée"""
+        x, y = position
+        neighbors = [
+            (x-1, y), (x+1, y),
+            (x, y-1), (x, y+1),
+            (x-1, y-1), (x+1, y+1),
+            (x-1, y+1), (x+1, y-1)
+        ]
+        random.shuffle(neighbors)  # Choisir au hasard
+
+        for nx, ny in neighbors:
+            if self.grid.is_valid_position((nx, ny)) and self.grid.is_empty((nx, ny)):
+                return (nx, ny)
+        return None
