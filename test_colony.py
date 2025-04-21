@@ -1,6 +1,8 @@
 # test_colony.py
 
 from Physarum.Colony import Colony
+import Physarum.Agent
+Physarum.Agent.Agent = FakeAgent
 
 class FakeGrid:
     def __init__(self):
@@ -26,9 +28,8 @@ class FakeAgent:
     def mutation(self, rate):
         pass  # Pas besoin pour ce test
 
-# Remplacer temporairement Agent par FakeAgent
-import Physarum.Agent
-Physarum.Agent.Agent = FakeAgent
+
+
 
 def test_colony_behavior():
     grid = FakeGrid()
